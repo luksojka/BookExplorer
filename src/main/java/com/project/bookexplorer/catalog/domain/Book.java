@@ -1,4 +1,4 @@
-package com.project.bookexplorer;
+package com.project.bookexplorer.catalog.domain;
 
 public class Book {
     Long id;
