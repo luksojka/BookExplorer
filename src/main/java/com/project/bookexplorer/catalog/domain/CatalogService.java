@@ -17,8 +17,15 @@ public class CatalogService {
 
     public List<Book> findByTitle(String title) {
         return repository.findAll()
-                        .stream()
-                        .filter(book -> book.getTitle().startsWith(title))
-                        .collect(Collectors.toList());
+                .stream()
+                .filter(book -> book.getTitle().startsWith(title))
+                .collect(Collectors.toList());
+    }
+
+    public List<Book> findByAuthor(String author) {
+        return repository.findAll()
+                .stream()
+                .filter(book -> book.getAuthor().startsWith(author))
+                .collect(Collectors.toList());
     }
 }
