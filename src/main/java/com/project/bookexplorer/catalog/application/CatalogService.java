@@ -1,19 +1,19 @@
-package com.project.bookexplorer.catalog.domain;
+package com.project.bookexplorer.catalog.application;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.project.bookexplorer.catalog.application.port.CatalogUseCase;
+import com.project.bookexplorer.catalog.domain.Book;
+import com.project.bookexplorer.catalog.domain.CatalogRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class CatalogService {
+@AllArgsConstructor
+class CatalogService implements CatalogUseCase {
 
     private final CatalogRepository repository;
-
-    public CatalogService(@Qualifier("bestsellerCatalogRepository") CatalogRepository repository) {
-        this.repository = repository;
-    }
 
     public List<Book> findByTitle(String title) {
         return repository.findAll()
@@ -28,4 +28,10 @@ public class CatalogService {
                 .filter(book -> book.getAuthor().startsWith(author))
                 .collect(Collectors.toList());
     }
+
+    public void addBook(CreateBookCommand command) {
+        Book book = new Book(command.getTitle(), command.getAuthor(), command.getYear());
+        repository.save(book);
+    }
+
 }
