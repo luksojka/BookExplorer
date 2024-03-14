@@ -2,6 +2,7 @@ package com.project.bookexplorer;
 
 import com.project.bookexplorer.catalog.application.port.CatalogUseCase;
 import com.project.bookexplorer.catalog.application.port.CatalogUseCase.CreateBookCommand;
+import com.project.bookexplorer.catalog.application.port.CatalogUseCase.UpdateBookCommand;
 import com.project.bookexplorer.catalog.domain.Book;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -31,6 +32,8 @@ public class ApplicationStartup implements CommandLineRunner {
         initData();
         findByTitle();
         findByAuthor();
+        findAndUpdate();
+        findByAuthor();
     }
 
     private void initData() {
@@ -52,6 +55,20 @@ public class ApplicationStartup implements CommandLineRunner {
     private void findByTitle() {
         List<Book> books = catalog.findByTitle(title);
         books.forEach(System.out::println);
+    }
+
+    private void findAndUpdate() {
+        System.out.println("Updating book....");
+        catalog.findOneByTitleAndAuthor("Diune", "Frank Herbert")
+                .ifPresent(book -> {
+                    UpdateBookCommand command = UpdateBookCommand
+                            .builder()
+                            .id(book.getId())
+                            .title("Diune part 2")
+                            .build();
+                    CatalogUseCase.UpdateBookResponse response = catalog.updateBook(command);
+                    System.out.println("Updating book result: " + response.isSuccess());
+                });
     }
 
 }
