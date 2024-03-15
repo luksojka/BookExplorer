@@ -4,6 +4,7 @@ import com.project.bookexplorer.catalog.domain.Book;
 import lombok.Builder;
 import lombok.Value;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,9 +15,11 @@ public interface CatalogUseCase {
 
     List<Book> findByTitle(String title);
 
+    Optional<Book> findOneByTitle(String title);
+
     List<Book> findByAuthor(String author);
 
-    Optional<Book> findOneByTitleAndAuthor (String title, String author);
+    Optional<Book> findOneByTitleAndAuthor(String title, String author);
 
     void addBook(CreateBookCommand command);
 
@@ -25,25 +28,30 @@ public interface CatalogUseCase {
     void removeById(Long id);
 
     @Value
-    class CreateBookCommand{
+    class CreateBookCommand {
         String title;
         String author;
         Integer year;
+        BigDecimal price;
+
+        public Book toBook() {
+            return new Book(title, author, year, price);
+        }
     }
 
     @Value
     @Builder
-    class UpdateBookCommand{
+    class UpdateBookCommand {
         Long id;
         String title;
         String author;
         Integer year;
 
         public Book updateFields(Book book) {
-            if(title != null) {
+            if (title != null) {
                 book.setTitle(title);
             }
-            if(author != null) {
+            if (author != null) {
                 book.setAuthor(author);
             }
             if (year != null) {
@@ -54,7 +62,7 @@ public interface CatalogUseCase {
     }
 
     @Value
-    class UpdateBookResponse{
+    class UpdateBookResponse {
         public static UpdateBookResponse SUCCESS = new UpdateBookResponse(true, emptyList());
 
         boolean success;
