@@ -51,6 +51,12 @@ public class CatalogController {
         return book;
     }
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteById(@PathVariable Long id) {
+        catalog.removeById(id);
+    }
+
     @Data
     private static class RestCreateBookCommand {
         private String title;
