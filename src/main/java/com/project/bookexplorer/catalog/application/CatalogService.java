@@ -62,9 +62,9 @@ class CatalogService implements CatalogUseCase {
                 .findFirst();
     }
 
-    public void addBook(CreateBookCommand command) {
+    public Book addBook(CreateBookCommand command) {
         Book book =  command.toBook();
-        repository.save(book);
+        return repository.save(book);
     }
 
     public UpdateBookResponse updateBook(UpdateBookCommand command) {
