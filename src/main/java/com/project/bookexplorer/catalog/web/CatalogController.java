@@ -3,6 +3,7 @@ package com.project.bookexplorer.catalog.web;
 import com.project.bookexplorer.catalog.application.port.CatalogUseCase;
 import com.project.bookexplorer.catalog.application.port.CatalogUseCase.CreateBookCommand;
 import com.project.bookexplorer.catalog.application.port.CatalogUseCase.UpdateBookCommand;
+import com.project.bookexplorer.catalog.application.port.CatalogUseCase.UpdateBookCoverCommand;
 import com.project.bookexplorer.catalog.application.port.CatalogUseCase.UpdateBookResponse;
 import com.project.bookexplorer.catalog.domain.Book;
 import jakarta.validation.constraints.DecimalMin;
@@ -14,10 +15,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("/catalog")
 @RestController
@@ -50,7 +54,7 @@ public class CatalogController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PatchMapping("{id}")
+    @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void updateBook(@PathVariable Long id, @Validated(UpdateValidation.class) @RequestBody RestBookCommand command) {
         UpdateBookResponse response = catalog.updateBook(command.toUpdateCommand(id));
@@ -58,6 +62,24 @@ public class CatalogController {
             String message = String.join(", ", response.getErrors());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
         }
+    }
+
+    @PatchMapping("/{id}/cover")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void addBookCover(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException {
+        System.out.println("Got file: " + file.getOriginalFilename());
+        catalog.updateBookCover(new UpdateBookCoverCommand(
+                id,
+                file.getBytes(),
+                file.getContentType(),
+                file.getOriginalFilename()
+        ));
+    }
+
+    @DeleteMapping("/{id}/cover")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBookCover(@PathVariable Long id) {
+        catalog.removeBookCover(id);
     }
 
     @PostMapping
