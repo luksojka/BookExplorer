@@ -3,20 +3,15 @@ package com.project.bookexplorer.catalog.web;
 import com.project.bookexplorer.catalog.application.port.CatalogUseCase;
 import com.project.bookexplorer.catalog.application.port.CatalogUseCase.CreateBookCommand;
 import com.project.bookexplorer.catalog.domain.Book;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("/catalog")
 @RestController
@@ -51,7 +46,7 @@ public class CatalogController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Book addBook(@Valid @RequestBody RestCreateBookCommand command) {
+    public Book addBook(@RequestBody RestCreateBookCommand command) {
         Book book = catalog.addBook(command.toCommand());
         return book;
     }
@@ -64,18 +59,9 @@ public class CatalogController {
 
     @Data
     private static class RestCreateBookCommand {
-
-        @NotBlank(message = "Please provide a title")
         private String title;
-
-        @NotBlank(message = "Please provide an author")
         private String author;
-
-        @NotNull
         private Integer year;
-
-        @NotNull
-        @DecimalMin("0.00")
         private BigDecimal price;
 
         CreateBookCommand toCommand() {
