@@ -96,10 +96,10 @@ public class CatalogController {
         catalog.removeById(id);
     }
 
-    interface UpdateValidation{
+    interface UpdateValidation {
     }
 
-    interface CreateValidation{
+    interface CreateValidation {
     }
 
     @Data

@@ -9,10 +9,7 @@ import lombok.Builder;
 import lombok.Singular;
 import lombok.Value;
 
-import java.util.Arrays;
 import java.util.List;
-
-import static java.util.Collections.emptyList;
 
 public interface ManipulateOrderUseCase {
 
@@ -33,7 +30,7 @@ public interface ManipulateOrderUseCase {
 
     class PlaceOrderResponse extends Either<String, Long> {
 
-        public PlaceOrderResponse(boolean success, String left, Long right){
+        public PlaceOrderResponse(boolean success, String left, Long right) {
             super(success, left, right);
         }
 
@@ -42,7 +39,7 @@ public interface ManipulateOrderUseCase {
         }
 
         public static PlaceOrderResponse failure(String error) {
-            return new PlaceOrderResponse(false,error,null);
+            return new PlaceOrderResponse(false, error, null);
         }
     }
 }

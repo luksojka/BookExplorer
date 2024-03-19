@@ -9,7 +9,6 @@ import com.project.bookexplorer.uploads.domain.Upload;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -79,7 +78,7 @@ class CatalogService implements CatalogUseCase {
                     repository.save(updatedBook);
                     return UpdateBookResponse.SUCCESS;
                 })
-                .orElseGet(() -> new UpdateBookResponse(false, Arrays.asList("Book not found with id: " + command.getId())));
+                .orElseGet(() -> new UpdateBookResponse(false, List.of("Book not found with id: " + command.getId())));
 
     }
 
@@ -99,7 +98,7 @@ class CatalogService implements CatalogUseCase {
     public void removeBookCover(Long id) {
         repository.findById(id)
                 .ifPresent(book -> {
-                    if (book.getCoverId() != null ) {
+                    if (book.getCoverId() != null) {
                         upload.removeById(book.getCoverId());
                         book.setCoverId(null);
                         repository.save(book);

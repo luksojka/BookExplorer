@@ -43,6 +43,7 @@ public interface CatalogUseCase {
         String contentType;
         String fileName;
     }
+
     @Value
     class CreateBookCommand {
         String title;

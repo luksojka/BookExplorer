@@ -1,7 +1,6 @@
 package com.project.bookexplorer.order.application.port;
 
 import com.project.bookexplorer.catalog.domain.Book;
-import com.project.bookexplorer.order.domain.Order;
 import com.project.bookexplorer.order.domain.OrderStatus;
 import com.project.bookexplorer.order.domain.Recipient;
 import lombok.Value;
@@ -32,7 +31,7 @@ public interface QueryOrderUseCase {
     }
 
     @Value
-    class ExtendedOrderItem{
+    class ExtendedOrderItem {
         Book book;
         int quantity;
     }
